@@ -1,0 +1,10 @@
+# Ignore data and output folders
+*/data/
+*/outputs/
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# Python cache files
+__pycache__/
+*.pyc
