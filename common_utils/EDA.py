@@ -4,11 +4,20 @@ import matplotlib.pyplot as plt
 
 def dataset_overview(df):
 
-    print("================== Dataset Overview ==================")
+    print("==================================== Dataset Overview ====================================")
+    
+    print("")
+    print("")
+    print("============ Data Shape ============")
     print(f"Rows: {df.shape[0]}")
     print(f"Columns: {df.shape[1]}")
 
+    print("")
+    print("")
+    print("============ Datatypes ============")
     df.info()
+
+    print("============ Missing Values ============")
     display(df.isnull().sum())
 
     print("============ Duplicates Values ============") 
@@ -25,8 +34,8 @@ def dataset_overview(df):
     display(df.sample(3))
 
     print("============ Numerical and Categorical Values ============")
-    num_cols = df.select_dtypes(include=['int64','float64']).columns
-    cat_cols = df.select_dtypes(include=['object']).columns
+    num_cols = df.select_dtypes(include=['number']).columns
+    cat_cols = df.select_dtypes(include=['object', 'category']).columns
     print(f"Numerical Datatypes: {num_cols}")
     print(f"Number of numeric features: {len(num_cols)}")
     print(f"Categorical Datatypes: {cat_cols}")
