@@ -7,7 +7,7 @@ def dataset_overview(df):
     print("==================================== Dataset Overview ====================================")
     
     print("")
-    print("")
+    
     print("============ Data Shape ============")
     print(f"Rows: {df.shape[0]}")
     print(f"Columns: {df.shape[1]}")
@@ -19,6 +19,9 @@ def dataset_overview(df):
 
     print("============ Missing Values ============")
     display(df.isnull().sum())
+
+    print("")
+    print("")
 
     print("============ Duplicates Values ============") 
     print(f"Duplicated values : {df.duplicated(keep=False).sum()}")
@@ -33,6 +36,9 @@ def dataset_overview(df):
     print("Sample:")
     display(df.sample(3))
 
+    print("")
+    print("")
+
     print("============ Numerical and Categorical Values ============")
     num_cols = df.select_dtypes(include=['number']).columns
     cat_cols = df.select_dtypes(include=['object', 'category']).columns
@@ -40,6 +46,8 @@ def dataset_overview(df):
     print(f"Number of numeric features: {len(num_cols)}")
     print(f"Categorical Datatypes: {cat_cols}")
     print(f"Number of categorical features: {len(cat_cols)}")
+
+    return num_cols, cat_cols
 
 
 def num_analysis(df,col):
@@ -65,10 +73,15 @@ def num_analysis(df,col):
     Q3 = df[col].quantile(0.75)
     Q1 = df[col].quantile(0.25)
 
-    print(f"IQR : {Q3 - Q1}")
+    IQR = Q3 - Q1
 
-    upper_outliers = df[df[col] > Q3]
-    lower_outliers = df[df[col] < Q1]
+    print(f"IQR : {IQR}")
+
+    lower_bound = Q1 - 1.5 * IQR
+    upper_bound = Q3 + 1.5 * IQR
+
+    upper_outliers = df[df[col] > upper_bound]
+    lower_outliers = df[df[col] < lower_bound]
 
     if len(upper_outliers)>0:
         print(f"****** Upper Outliers ******")
@@ -90,11 +103,11 @@ def num_analysis(df,col):
 def categorical_analysis(df,col):
     print(f"****************************** {col} analysis ******************************")
     
-    print(f"Number of Unique Values: {df[col].nunique()}")
+    print(f"Number of Unique {col} values: {df[col].nunique()}")
     if df[col].nunique() < 10:
         fig, ax = plt.subplots(figsize=(8, 4))
         sns.histplot(data=df, x=col, ax=ax, hue=col,legend=False)
-        ax.set_title("Value Distribution")
+        ax.set_title(f"{col} Value Distribution")
         for tick in ax.get_xticklabels():
             tick.set_rotation(45)
         
